@@ -1,13 +1,46 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
 import { color } from '../assets/styles';
+import * as eva from '@eva-design/eva';
+import { ApplicationProvider, IconRegistry, Layout, Icon } from '@ui-kitten/components';
+import { EvaIconsPack } from '@ui-kitten/eva-icons';
+
 const Notes = () => {
     return (
         <View style={styles.notesContainer}>
 
             <View style={styles.headingContainer}>
-                <Text style={styles.heading}>Welcome to Notes</Text>
-            </View>
+                <Text style={styles.heading}>Your Notes...</Text>
 
+                <View style={{flexDirection: 'row'}}>
+
+                    <TouchableOpacity style={[ styles.button, {marginLeft: 40} ]}>
+                    <IconRegistry icons={EvaIconsPack} />
+                    <ApplicationProvider {...eva} theme={eva.light}>
+                        <Icon name='trash-2-outline' fill='white' style={{width: 25, height: 50}} />
+                    </ApplicationProvider>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={styles.button}>
+                    <IconRegistry icons={EvaIconsPack} />
+                    <ApplicationProvider {...eva} theme={eva.light}>
+                        <Icon name='plus-outline' fill='white' style={{width: 25, height: 50}} />
+                    </ApplicationProvider>
+                    </TouchableOpacity>
+                </View>
+            </View>
+            <View style={{flexDirection: 'row', justifyContent: 'left'}}>
+                <Text style={{fontWeight: '700', fontSize: 18, color: color}}>
+                    Total:
+                </Text>
+            </View>
+            <View style={styles.divider} />
+            <View style={styles.searchContainer}>
+                <TextInput
+                    placeholder='Search...'
+                    placeholderTextColor={color}
+                    style={[styles.input, {borderWidth: 3}]}
+                    />
+            </View>
         </View>
     );
 };
@@ -20,7 +53,7 @@ const styles = StyleSheet.create({
         opacity: 0.9,
     },
     heading: {
-        fontSize: 20,
+        fontSize: 30,
         fontWeight: '700',
         color: color,
     },
@@ -100,9 +133,9 @@ const styles = StyleSheet.create({
     },
 
     input: {
-        height: 40,
+        height: 50,
         paddingHorizontal: 20,
-        width: '65%',
+        width: '75%',
         fontSize: 19,
         color: 'black',
         fontWeight: '600',
