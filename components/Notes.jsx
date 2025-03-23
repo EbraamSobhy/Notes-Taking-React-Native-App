@@ -4,7 +4,7 @@ import * as eva from '@eva-design/eva';
 import { ApplicationProvider, IconRegistry, Layout, Icon } from '@ui-kitten/components';
 import { EvaIconsPack } from '@ui-kitten/eva-icons';
 
-const Notes = () => {
+const Notes = ({ navigation }) => {
     return (
         <View style={styles.notesContainer}>
 
@@ -20,7 +20,7 @@ const Notes = () => {
                     </ApplicationProvider>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.button}>
+                    <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('AddNote')}>
                     <IconRegistry icons={EvaIconsPack} />
                     <ApplicationProvider {...eva} theme={eva.light}>
                         <Icon name='plus-outline' fill='white' style={{width: 25, height: 50}} />
@@ -34,12 +34,25 @@ const Notes = () => {
                 </Text>
             </View>
             <View style={styles.divider} />
+            {/* Search bar */}
             <View style={styles.searchContainer}>
                 <TextInput
                     placeholder='Search...'
                     placeholderTextColor={color}
                     style={[styles.input, {borderWidth: 3}]}
                     />
+                    {/* Search button */}
+                <TouchableOpacity style={styles.searchButton}>
+                <IconRegistry icons={EvaIconsPack} />
+                    <ApplicationProvider {...eva} theme={eva.light}>
+                        <Icon name='search' fill='white' style={{width: 22 , height: 40}} />
+                    </ApplicationProvider>
+                </TouchableOpacity>
+
+                {/* clear button */}
+                <TouchableOpacity style={styles.clearButton}>
+                    <Text style={styles.clearButtonText}>Clear</Text>
+                </TouchableOpacity>
             </View>
         </View>
     );
@@ -135,7 +148,7 @@ const styles = StyleSheet.create({
     input: {
         height: 50,
         paddingHorizontal: 20,
-        width: '75%',
+        width: '65%',
         fontSize: 19,
         color: 'black',
         fontWeight: '600',
@@ -162,15 +175,30 @@ const styles = StyleSheet.create({
         backgroundColor: color,
         alignItems: 'center',
         justifyContent: 'center',
+        width: 50,
+        borderRadius: 5,
+        height: 40,
+    },
+
+    clearButton:{
+        backgroundColor: color,
+        alignItems: 'center',
+        justifyContent: 'center',
         width: 60,
         borderRadius: 5,
         height: 40,
     },
 
+    clearButtonText:{
+        color: 'white',
+        fontWeight: '700',
+        fontSize: 15,
+    },
+
     searchButtonText: {
         color: 'white',
         fontWeight: '700',
-        fontSize: 12
+        fontSize: 12,
     },
 
     emptyNoteContainer: {
