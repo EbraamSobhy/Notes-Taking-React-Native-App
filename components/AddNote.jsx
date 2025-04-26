@@ -1,25 +1,42 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, KeyboardAvoidingView, Platform, Keyboard, TextInput, TouchableOpacity, Alert, TouchableWithoutFeedback } from 'react-native';
 import { color } from '../assets/styles';
 
-const AddNote = () => {
+const AddNote = ({ navigation, note, setNote, handleNote }) => {
     return (
-        <View>
-        <Text>AddNote</Text>
-        </View>
-    )
-}
+        <ScrollView>
+            <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+                <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                    <View style={{ padding: 20, justifyContent: 'space-around' }}>
+                        <TextInput
+                            style={styles.input}
+                            placeholder='Type Here...'
+                            multiline={true}
+                            value={note}
+                            onChangeText={(text) => setNote(text)}
+                        />
+                        <TouchableOpacity
+                            style={styles.button}
+                            onPress={() => {
+                                if (note.trim() === '') {
+                                    Alert.alert('Please enter a note'); // Alert if note is empty
+                                } else {
+                                    handleNote(note); // Pass the note to handleNote
+                                    navigation.navigate('Notes'); // Navigate back to Notes screen
+                                }
+                            }}
+                        >
+                            <Text style={styles.buttonText}>Add Note</Text>
+                        </TouchableOpacity>
+                    </View>
+                </TouchableWithoutFeedback>
+            </KeyboardAvoidingView>
+        </ScrollView>
+    );
+};
 
 const styles = StyleSheet.create({
-    addNoteContainer: {
-        paddingHorizontal: 20,
-        marginTop: 20,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-
     input: {
         padding: 20,
-        paddingTop: 20,
         width: '100%',
         fontSize: 20,
         color: 'black',
@@ -35,9 +52,9 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderRadius: 5,
         height: 300,
+        textAlignVertical: 'top',
     },
-
-    button:{
+    button: {
         backgroundColor: color,
         width: '40%',
         borderRadius: 100,
@@ -47,12 +64,11 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-end',
         marginTop: 20,
     },
-
     buttonText: {
         color: 'white',
         fontWeight: '700',
         fontSize: 20,
-    }
-})
+    },
+});
 
 export default AddNote;

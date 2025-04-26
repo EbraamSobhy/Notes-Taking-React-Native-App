@@ -1,10 +1,10 @@
-import { View, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, ScrollView } from 'react-native';
 import { color } from '../assets/styles';
 import * as eva from '@eva-design/eva';
-import { ApplicationProvider, IconRegistry, Layout, Icon } from '@ui-kitten/components';
+import { ApplicationProvider, IconRegistry, Icon } from '@ui-kitten/components';
 import { EvaIconsPack } from '@ui-kitten/eva-icons';
 
-const Notes = ({ navigation }) => {
+const Notes = ({ navigation, notes = [] }) => {
     return (
         <View style={styles.notesContainer}>
 
@@ -13,7 +13,7 @@ const Notes = ({ navigation }) => {
 
                 <View style={{flexDirection: 'row'}}>
 
-                    <TouchableOpacity style={[ styles.button, {marginLeft: 40} ]}>
+                    <TouchableOpacity style={[ styles.button, {marginLeft: 40} ]} onPress={() => navigation.navigate('DeletedNotes')}>
                     <IconRegistry icons={EvaIconsPack} />
                     <ApplicationProvider {...eva} theme={eva.light}>
                         <Icon name='trash-2-outline' fill='white' style={{width: 25, height: 50}} />
@@ -54,6 +54,25 @@ const Notes = ({ navigation }) => {
                     <Text style={styles.clearButtonText}>Clear</Text>
                 </TouchableOpacity>
             </View>
+            <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+                {notes.length === 0 ? (
+                    <View style={styles.emptyNoteContainer}>
+                        <Text style={styles.emptyNoteText}>No notes available</Text>
+                    </View>
+                ) : (
+                    notes.map((item, index) => (
+                        <View key={index} style={styles.item}>
+                            <View style={styles.note}>
+                                <Text style={styles.index}>{index + 1}</Text>
+                                <Text style={styles.text}>{item}</Text>
+                            </View>
+                            <TouchableOpacity>
+                                <Text style={styles.delete}>Delete</Text>
+                            </TouchableOpacity>
+                        </View>
+                    ))
+                )}
+            </ScrollView>
         </View>
     );
 };
