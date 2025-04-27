@@ -10,51 +10,59 @@ const Stack = createNativeStackNavigator();
 export default function App() {
   const [note, setNote] = useState('');
   const [notes, setNotes] = useState([]);
+  const [date, setDate] = useState(new Date().toUTCString());
+  const [moveToBin, setMoveToBin] = useState([ ]);
 
-  // Function to handle adding a new note
   function handleNote(note) {
-    // Remove numbers from the note
+
     let sanitizedNote = note.replace(/[0-9]/g, '');
-    // Add the sanitized note to the beginning of the notes array
+
     let newNotes = [sanitizedNote, ...notes];
-    setNotes(newNotes); // Update the notes state
-    setNote(''); // Clear the note input
+    setNotes(newNotes);
+    setNote('');
   }
 
   return (
       <NavigationContainer>
         <Stack.Navigator>
-          <Stack.Screen 
-            name="Notes" 
+          <Stack.Screen
+            name="Notes"
             options={{ title: 'Notes' }}
             children={(props) => (
-              <Notes 
-                {...props} 
-                notes={notes} 
-                setNotes={setNotes} 
-                note={note} 
-                setNote={setNote} 
+              <Notes
+                {...props}
+                notes={notes}
+                setNotes={setNotes}
+                note={note}
+                setNote={setNote}
+                date={date}
+                setDate={setDate}
               />
             )}
           />
 
-          <Stack.Screen 
-            name="AddNote" 
+          <Stack.Screen
+            name="AddNote"
             options={{ title: 'Add Note' }}
             children={(props) => (
-              <AddNote 
-                {...props} 
-                note={note} 
-                setNote={setNote} 
-                handleNote={handleNote} 
+              <AddNote
+                {...props}
+                note={note}
+                setNote={setNote}
+                handleNote={handleNote}
               />
             )}
           />
 
-          <Stack.Screen 
-            name="DeletedNotes" 
-            component={DeletedNotes} 
+          <Stack.Screen
+            name="DeletedNotes"
+            component={DeletedNotes}
             options={{ title: 'Deleted Notes' }}
+            moveToBin={moveToBin}
+            setMoveToBin={setMoveToBin}
+            notes={notes}
+            setNotes={setNotes}
+            date={date}
           />
         </Stack.Navigator>
       </NavigationContainer>

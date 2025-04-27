@@ -4,7 +4,7 @@ import * as eva from '@eva-design/eva';
 import { ApplicationProvider, IconRegistry, Icon } from '@ui-kitten/components';
 import { EvaIconsPack } from '@ui-kitten/eva-icons';
 
-const Notes = ({ navigation, notes = [] }) => {
+const Notes = ({ navigation, notes = [], date }) => {
     return (
         <View style={styles.notesContainer}>
 
@@ -62,14 +62,26 @@ const Notes = ({ navigation, notes = [] }) => {
                 ) : (
                     notes.map((item, index) => (
                         <View key={index} style={styles.item}>
+                            <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+
                             <View style={styles.note}>
-                                <Text style={styles.index}>{index + 1}</Text>
+                                <Text style={styles.index}>{index + 1}. </Text>
                                 <Text style={styles.text}>{item}</Text>
                             </View>
+
                             <TouchableOpacity>
-                                <Text style={styles.delete}>Delete</Text>
+                                <Text style={styles.delete}>X</Text>
                             </TouchableOpacity>
                         </View>
+
+                        <View style={styles.dateContainer}>
+                            <Text>{date}</Text>
+
+                            <TouchableOpacity>
+                                <Text style={styles.delete}>Edit</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
                     ))
                 )}
             </ScrollView>
