@@ -22,6 +22,12 @@ export default function App() {
     setNote('');
   }
 
+  function undoNote(index) {
+    const noteToRestore = moveToBin[index];
+    setMoveToBin(moveToBin.filter((_, i) => i !== index));
+    setNotes([noteToRestore, ...notes]);
+  }
+
   return (
       <NavigationContainer>
         <Stack.Navigator>
@@ -37,6 +43,8 @@ export default function App() {
                 setNote={setNote}
                 date={date}
                 setDate={setDate}
+                moveToBin={moveToBin}
+                setMoveToBin={setMoveToBin}
               />
             )}
           />
@@ -56,13 +64,18 @@ export default function App() {
 
           <Stack.Screen
             name="DeletedNotes"
-            component={DeletedNotes}
             options={{ title: 'Deleted Notes' }}
-            moveToBin={moveToBin}
-            setMoveToBin={setMoveToBin}
-            notes={notes}
-            setNotes={setNotes}
-            date={date}
+            children={(props) => (
+              <DeletedNotes
+                {...props}
+                moveToBin={moveToBin}
+                setMoveToBin={setMoveToBin}
+                notes={notes}
+                setNotes={setNotes}
+                date={date}
+                undoNote={undoNote}
+              />
+            )}
           />
         </Stack.Navigator>
       </NavigationContainer>

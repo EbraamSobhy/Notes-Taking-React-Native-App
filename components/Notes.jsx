@@ -3,8 +3,29 @@ import { color } from '../assets/styles';
 import * as eva from '@eva-design/eva';
 import { ApplicationProvider, IconRegistry, Icon } from '@ui-kitten/components';
 import { EvaIconsPack } from '@ui-kitten/eva-icons';
+import React, { useState } from 'react';
 
-const Notes = ({ navigation, notes = [], date }) => {
+const Notes = ({ navigation, notes = [], date, setNotes, moveToBin, setMoveToBin }) => {
+    const [searchQuery, setSearchQuery] = useState('');
+
+    const filteredNotes = notes.filter(note =>
+        note.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+    function deleteNotes(index) {
+        let newArray = [...notes];
+        let movedNote = newArray.splice(index, 1);
+        setNotes(newArray);
+
+        let bin = [movedNote[0], ...moveToBin];
+        setMoveToBin(bin);
+    }
+
+    function clearAllNotes() {
+        setMoveToBin([...notes, ...moveToBin]);
+        setNotes([]);
+    }
+
     return (
         <View style={styles.notesContainer}>
 
@@ -28,11 +49,6 @@ const Notes = ({ navigation, notes = [], date }) => {
                     </TouchableOpacity>
                 </View>
             </View>
-            <View style={{flexDirection: 'row', justifyContent: 'left'}}>
-                <Text style={{fontWeight: '700', fontSize: 18, color: color}}>
-                    Total:
-                </Text>
-            </View>
             <View style={styles.divider} />
             {/* Search bar */}
             <View style={styles.searchContainer}>
@@ -40,7 +56,9 @@ const Notes = ({ navigation, notes = [], date }) => {
                     placeholder='Search...'
                     placeholderTextColor={color}
                     style={[styles.input, {borderWidth: 3}]}
-                    />
+                    value={searchQuery}
+                    onChangeText={setSearchQuery}
+                />
                     {/* Search button */}
                 <TouchableOpacity style={styles.searchButton}>
                 <IconRegistry icons={EvaIconsPack} />
@@ -50,17 +68,17 @@ const Notes = ({ navigation, notes = [], date }) => {
                 </TouchableOpacity>
 
                 {/* clear button */}
-                <TouchableOpacity style={styles.clearButton}>
+                <TouchableOpacity style={styles.clearButton} onPress={clearAllNotes}>
                     <Text style={styles.clearButtonText}>Clear</Text>
                 </TouchableOpacity>
             </View>
             <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
-                {notes.length === 0 ? (
+                {filteredNotes.length === 0 ? (
                     <View style={styles.emptyNoteContainer}>
                         <Text style={styles.emptyNoteText}>No notes available</Text>
                     </View>
                 ) : (
-                    notes.map((item, index) => (
+                    filteredNotes.map((item, index) => (
                         <View key={index} style={styles.item}>
                             <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
 
@@ -69,7 +87,7 @@ const Notes = ({ navigation, notes = [], date }) => {
                                 <Text style={styles.text}>{item}</Text>
                             </View>
 
-                            <TouchableOpacity>
+                            <TouchableOpacity onPress={() => deleteNotes(index)}>
                                 <Text style={styles.delete}>X</Text>
                             </TouchableOpacity>
                         </View>
@@ -104,9 +122,9 @@ const styles = StyleSheet.create({
 
     divider: {
         width: '100%',
-        height: 2,
+        height: 3,
         backgroundColor: color,
-        marginTop: 5,
+        marginTop: 7,
         marginBottom: 5,
     },
 
